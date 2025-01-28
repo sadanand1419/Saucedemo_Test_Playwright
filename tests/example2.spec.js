@@ -19,7 +19,7 @@ test.describe('SauceDemo Tests', () => {
     await page.locator('[data-test="product-sort-container"]').selectOption('za');
 
     // Wait for the sorting to complete (optional)
-    await page.waitForTimeout(2000); // Adjust timeout if needed
+    await page.waitForTimeout(5000); // Adjust timeout if needed
 
      // Get the product names after sorting
     const sortedProductNames = await page.$$eval('.inventory_item_name', (elements) =>
@@ -30,36 +30,24 @@ test.describe('SauceDemo Tests', () => {
     expect(sortedProductNames).toEqual(initialProductNames.sort().reverse());
     
   });
-//[2]
-  test('Verify price order (high-low)', async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/');
-    await page.locator('#user-name').fill('standard_user');
-    await page.locator('#password').fill('secret_sauce');
-    await page.locator('#login-button').click();
-
-    
-    // Get the initial product prices
-    const initialProductPrices = await page.$$eval('.inventory_item_price', (elements) =>
-      elements.map((el) => parseFloat(el.textContent.replace('$', '')))
+//CP//
+ 
+   //2
+   test('Verify price order high to low', async ({ page }) => {
+    // ... (previous steps to navigate and sort the products) ...
+  
+    const initialProductPrices = await page.$$eval('.product-price', (elements) => 
+      elements.map((element) => parseFloat(element.textContent.replace('$', ''))) 
     );
-
-    // Click on the "High to Low" button
-    await page.waitForTimeout(2000);
-    await page.locator('.product_sort_container').selectOption('hilo')
-    //await page.locator('select[data-test="product_sort_container"] >> option:has-text("hilo")').click();
-    
-   
-       await page.waitForTimeout(2000);
-    
-    // Get the product prices after sorting
-    const sortedProductPrices = await page.$$eval('.inventory_item_price', (elements) =>
-      elements.map((el) => parseFloat(el.textContent.replace('$', '')))
+  
+    const sortedProductPrices = await page.$$eval('.product-price', (elements) => 
+      elements.map((element) => parseFloat(element.textContent.replace('$', ''))) 
     );
-
+  
     // Assert that the products are sorted in descending price order
-    expect(sortedProductPrices).toContainEqual(initialProductPrices.sort().reverse());
+    expect(sortedProductPrices).toEqual(initialProductPrices.sort((a, b) => b - a));
   });
-   
+   //2
   
 //[3]
   test('Add items to cart and checkout', async ({ page }) => {

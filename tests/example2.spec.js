@@ -19,7 +19,7 @@ test.describe('SauceDemo Tests', () => {
     await page.locator('[data-test="product-sort-container"]').selectOption('za');
 
     // Wait for the sorting to complete (optional)
-    await page.waitForTimeout(5000); // Adjust timeout if needed
+    await page.waitForTimeout(2000); // Adjust timeout if needed
 
      // Get the product names after sorting
     const sortedProductNames = await page.$$eval('.inventory_item_name', (elements) =>
